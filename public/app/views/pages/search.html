@@ -1,0 +1,11 @@
+<form ng-submit="search.doSearch()">
+<input style="width: 400px" type="text" placeholder="rechercher un expert avec mot clé" ng-model="search.searchTitle"/>
+    <button type="submit">rechercher</button>
+</form>
+
+<h4>Results : </h4>
+<div ng-repeat="x in search.expertsResult.docs">
+    <p>Name : {{x.USER_NAME}}</p>
+    <p>Tag text : {{x.TAG_TEXT}}</p>
+<p>*******************************</p>
+</div>
