@@ -1,11 +1,26 @@
 <form ng-submit="search.doSearch()">
 <input style="width: 400px" type="text" placeholder="rechercher un expert avec mot clé" ng-model="search.searchTitle"/>
     <button type="submit">rechercher</button>
+    <br>
+    <br>
+    <p>Options de recherche :</p>
+    <p>(Domaine par défaut)</p>
+    <input type="checkbox" id="name" ng-model="search.byName" ng-checked="false"/>
+    <label for="name">Nom</label>
+
+    <input type="checkbox" id="tag" ng-model="search.byTag" ng-checked="true"/>
+    <label for="tag">Domaine</label>
+
+    <input type="checkbox" id="affiliation" ng-model="search.byAffiliation" ng-checked="false"/>
+    <label for="affiliation">Affiliation</label>
 </form>
+
+
 
 <h4>Results : </h4>
 <div ng-repeat="x in search.expertsResult.docs">
-    <p>Name : {{x.USER_NAME}}</p>
-    <p>Tag text : {{x.TAG_TEXT}}</p>
+    <p>Name : {{x.prof_name}}</p>
+    <p>Tag text : {{x.tag}}</p>
+    <p>Affiliation : {{x.affiliations}}</p>
 <p>*******************************</p>
 </div>
