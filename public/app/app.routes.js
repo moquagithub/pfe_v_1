@@ -10,6 +10,10 @@ angular.module('appRoutes',['ngRoute'])
                 templateUrl: 'app/views/pages/search.html'
             })
 
+            .when('/data',{
+                templateUrl: 'app/views/pages/data.html'
+            })
+
 
             .otherwise({redirectTo : '/'});
 

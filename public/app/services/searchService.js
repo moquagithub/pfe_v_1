@@ -8,5 +8,9 @@ angular.module('searchService', [])
         return $http.get('/solr/searchExperts/'+search+'');
     }
 
+    searchFactory.data = function (search) {
+        return $http.get('');
+    }
+
     return searchFactory;
 })

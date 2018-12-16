@@ -10,6 +10,8 @@ db.on('error', function(err){
 
 db.once('open', function callback () {
     console.info('Connected to experts db successfully');
+
+
 });
 
 

@@ -1,0 +1,52 @@
+<div class="col-md-6">
+
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Collecte data</h3>
+
+        </div>
+        <div class="panel-body" style="">
+            <!----------------------------------------------->
+            <div id="">
+
+                <div ng-controller="DataminigController as data">
+
+                    <script type="text/javascript" src="app\javascript\webservicepy.js"></script>
+                    <form method="post" ng-submit="data.collecte()">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Mot clé:</label>
+                            <div class="panel-body">
+                                <input type="text" id="key"    class="form-control"  id="key" ng-model="data.key">
+
+
+                            </div>
+                            <div class="panel panel-default" style="width:480px;margin-left: 15px;">
+                            <label class="control-label col-sm-5">sauvegarder dans :</label>
+                            <b>csv</b>
+
+                            <input type="checkbox"  id="csv" ng-model="data.csv">
+                            <b>MongoDb</b>
+
+                            <input type="checkbox"  id="mongo" ng-model="data.mongo">
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-sm-12">
+
+
+                            <button type="button" onclick="collecter()"  class="col-sm-12 btn btn-danger btn-load"> start
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!----------------------------------------------->
+        </div>
+    </div>
+</div>
+</div>

@@ -30,12 +30,14 @@ server.use(express.static(__dirname + '/public'));
 
 // let pilote = require('./app/pilote')(server,express);
 let solr = require('./app/routes/solr')(server,express);
+let dataminig = require('./app/routes/datamining')(server,express);
 
 /* /api is the root of our api, means that if we want to access the signup api
 * we should type localhost:3000/api/signup */
 
 // server.use('/pilote',pilote);
 server.use('/solr',solr);
+server.use('/dataminig',dataminig);
 
 //the parent file of the view pages (Angular routing)
 server.use(function(req, res){
