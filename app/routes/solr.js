@@ -7,7 +7,7 @@ let SolrNode = require('solr-node');
 let client = new SolrNode({
     host: '127.0.0.1',
     port: '8983',
-    core: 'localDocs',
+    core: 'BigDP',
     protocol: 'http',
     debugLevel: 'ERROR' // log4js debug level paramter
 });
@@ -20,15 +20,73 @@ module.exports = function (app, express) {
     /******************************************************************/
 
     /*Recherche d'experts dans Solr*/
-    api.get('/searchExperts/:search', function (req, res) {
+    api.get('/searchExperts/:search/:byName/:byTag/:byAffiliation', function (req, res) {
         let search = req.params.search.toLowerCase();
+        let byName = req.params.byName;
+        let byTag = req.params.byTag;
+        let byAffiliation = req.params.byAffiliation;
 
+        /*By default we search on tag field*/
         let searchQuery = client.query()
-            .q({TAG_TEXT: search})
+            .q({tag: search})
             .addParams({
                 wt: 'json',
                 indent: true
             }).rows(1000);
+
+        /*Other cases*/
+        if (byName === 'true') {
+            console.log('hanaaaaa');
+            searchQuery = client.query()
+                .q({prof_name: search})
+                .addParams({
+                    wt: 'json',
+                    indent: true
+                }).rows(1000);
+        }
+
+        if (byAffiliation === 'true') {
+
+            searchQuery = client.query()
+                .q({affiliations: search})
+                .addParams({
+                    wt: 'json',
+                    indent: true
+                }).rows(1000);
+        }
+        if (byName === 'true' && byTag === 'true') {
+            searchQuery = client.query()
+                .q('prof_name: ' + search + ' OR tag: ' + search + '')
+                .addParams({
+                    wt: 'json',
+                    indent: true
+                }).rows(1000);
+        }
+        if (byName === 'true' && byAffiliation === 'true') {
+            searchQuery = client.query()
+                .q('prof_name: ' + search + ' OR affiliations: ' + search + '')
+                .addParams({
+                    wt: 'json',
+                    indent: true
+                }).rows(1000);
+        }
+        if (byTag === 'true' && byAffiliation === 'true') {
+            searchQuery = client.query()
+                .q('tag: ' + search + ' OR affiliations: ' + search + '')
+                .addParams({
+                    wt: 'json',
+                    indent: true
+                }).rows(1000);
+        }
+        if (byName === 'true' && byTag === 'true' && byAffiliation === 'true') {
+            searchQuery = client.query()
+                .q('tag: ' + search + ' OR affiliations: ' + search + ' OR prof_name: ' + search + '')
+                .addParams({
+                    wt: 'json',
+                    indent: true
+                }).rows(1000);
+        }
+
 
         client.search(searchQuery, function (err, result) {
             if (err) {
@@ -40,42 +98,33 @@ module.exports = function (app, express) {
         });
 
     })
-    
-    /*Ajouter plusieurs documents à Solr*/
-    api.post('/addExpertsDocuments',function (req,res) {
 
-        // Experts.find({}).select('USER_NAME USER_URL AFFILIATION VERIFICATION_ID CITATION_TEXT TAG_TEXT').exec(function (err,docs) {
-        //     if(err)
-        //         throw err;
+    /*Ajouter plusieurs documents à Solr*/
+    api.post('/addExpertsDocuments', function (req, res) {
+        Experts.find({}).select('_id USER_NAME USER_URL AFFILIATION VERIFICATION_ID CITATION_TEXT TAG_TEXT').exec(function (err, docs) {
+            if (err)
+                throw err;
             // Update document to Solr server
-            // let data = docs;
-        let data = {};
-        let key ='content';
-        data[key]=[];
-         let data1 =
-              {
-            id : 3242344235,
-            USER_NAME: 'hamidjen',
-            USER_URL: 'hamidjen.com',
-            AFFILIATION: 'hamidjen academy',
-            VERIFICATION_ID: 'blabla',
-            CITATION_TEXT:'hamidjenotology',
-            TAG_TEXT:'expert in hamidjenotology and blablatology'
-        };
-        let data2 = {
-            id : 234234556,
-            USER_NAME: 'hamidjen',
-            USER_URL: 'hamidjen.com',
-            AFFILIATION: 'hamidjen academy',
-            VERIFICATION_ID: 'blabla',
-            CITATION_TEXT:'trolology',
-            TAG_TEXT:'expert in data mining and trolology'
-        };
-        data[key].push(data1);
-        data[key].push(data2);
-        console.log(data);
-            data.content.forEach((doc)=>{
-                client.update(doc, function(err, result) {
+            // res.json(docs);
+            let data = docs.map(doc => ({
+                id : doc._id,
+
+                prof_name : doc.USER_NAME,
+
+                prof_url : doc.USER_URL,
+
+                affiliations : doc.AFFILIATION,
+
+                verified_id : doc.VERIFICATION_ID,
+
+                citation : doc.CITATION_TEXT,
+
+                tag : doc.TAG_TEXT
+            }));
+            // res.json(data);
+
+            data.forEach((doc) => {
+                client.update(doc, function (err, result) {
                     if (err) {
                         console.log(err);
                         return;
@@ -84,11 +133,9 @@ module.exports = function (app, express) {
                 });
             })
 
+        })
 
-        // })
-
-
-
+        res.send('Started migration');
     })
 
     /******************************************************************/

@@ -8,6 +8,7 @@ angular.module('MyApp', ['appRoutes', 'mainCtrl', 'authService', 'searchCtrl', '
         // Change the default overlay message
         blockUIConfig.message = 'Chargement en cours';
 
+
         // Change the default delay to 100ms before the blocking is visible
         // blockUIConfig.delay = 100;
     });
