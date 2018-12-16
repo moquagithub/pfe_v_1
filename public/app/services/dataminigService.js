@@ -11,7 +11,7 @@ angular.module('dataminingService', [])
 
 
 
-        return searchFactory;
+        return dataFactory;
     })
 
     .factory('modal', function($window) {
