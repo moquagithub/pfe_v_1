@@ -1,5 +1,7 @@
 const fs = require('fs');
 const Experts = require('../models/experts');
+const mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
 /*Solar*/
 let SolrNode = require('solr-node');
@@ -101,7 +103,32 @@ module.exports = function (app, express) {
 
     /*Ajouter plusieurs documents à Solr*/
     api.post('/addExpertsDocuments', function (req, res) {
-        Experts.find({}).select('_id USER_NAME USER_URL AFFILIATION VERIFICATION_ID CITATION_TEXT TAG_TEXT').exec(function (err, docs) {
+        /*Create a dynamic connexion to databases*/
+        let conn = mongoose.createConnection('mongodb://localhost:27017/'+req.body.nomBD+'',{ useNewUrlParser: true });
+        conn.on('error', function(err){
+            if(err) throw err;
+        });
+
+        conn.on('close', function(){
+            console.log('connexion to '+req.body.nomBD+' closed');
+        });
+
+        conn.once('open', function callback () {
+            console.info('Connected to '+req.body.nomBD+' db successfully');
+        });
+
+        let MyModel = conn.model('ExpertsSchema', new Schema({
+            _id : String,
+            USER_NAME : String,
+            USER_URL : String,
+            AFFILIATION : String,
+            VERIFICATION_ID : String,
+            CITATION_TEXT : String,
+            TAG_TEXT : String
+        },{ collection : 'GeneralProfiles' }));
+
+        /*****************************************/
+        MyModel.find({}).select('_id USER_NAME USER_URL AFFILIATION VERIFICATION_ID CITATION_TEXT TAG_TEXT').exec(function (err, docs) {
             if (err)
                 throw err;
             // Update document to Solr server
@@ -123,19 +150,24 @@ module.exports = function (app, express) {
             }));
             // res.json(data);
 
-            data.forEach((doc) => {
-                client.update(doc, function (err, result) {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                    console.log('Response:', result.responseHeader);
-                });
-            })
+            let end = 0;
 
+               data.forEach((doc) => {
+                   client.update(doc, function (err, result) {
+                       if (err) {
+                           console.log(err);
+                           return;
+                       }
+                       end++;
+                        if(end === data.length){
+                            conn.close();
+                            res.send('Migration ended successfully');
+
+                        }
+                       console.log('Response:', result.responseHeader);
+                   });
+               })
         })
-
-        res.send('Started migration');
     })
 
     /******************************************************************/
