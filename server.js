@@ -37,7 +37,7 @@ let dataminig = require('./app/routes/datamining')(server,express);
 
 // server.use('/pilote',pilote);
 server.use('/solr',solr);
-server.use('/dataminig',dataminig);
+server.use('/datamining',dataminig);
 
 //the parent file of the view pages (Angular routing)
 server.use(function(req, res){

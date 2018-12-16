@@ -1,4 +1,5 @@
 const fs = require('fs');
+const dbs = require('../models/allDataBase');
 
 module.exports = function (app, express) {
     let api = express.Router();
@@ -6,7 +7,30 @@ module.exports = function (app, express) {
     //process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
     /******************************************************************/
+  api.post('/saveNameData', function (req,res) {
+        let dbName = new dbs({
 
+            dbname : req.body.dbname
+        })
+
+        dbName.save(function (err) {
+            if(err) res.send(err);
+            else res.json("dbname stored");
+        })
+
+  })
+
+   api.get('/alldb',function (req,res) {
+       dbs.find({},function (err,dbnames) {
+
+           if (err) {
+               res.send(err);
+               return;
+           }
+           res.json(dbnames);
+       })
+
+   })
 
     api.post('/data', function (req, res) {
 

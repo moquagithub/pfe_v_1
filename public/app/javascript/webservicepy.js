@@ -24,6 +24,18 @@ function collecter() {
 
     window.open(webService,key,"menubar=yes, status=no, width=50px");
 
+    $.post("https://localhost:3100/datamining/saveNameData",
+        {
+            dbname: key,
+
+        },
+        function(data,status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+
+
+
 
 
 }
+

@@ -9,9 +9,11 @@ angular.module('dataminingService', [])
         }
 
 
+        dataFactory.getAllDb = function () {
+            return $http.get('/datamining/alldb');
+        }
 
-
-        return searchFactory;
+        return dataFactory;
     })
 
     .factory('modal', function($window) {
