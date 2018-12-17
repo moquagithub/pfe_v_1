@@ -1,0 +1,20 @@
+<div ng-controller="halController as halsearch">
+    <form ng-submit="halsearch.search()">
+        <div class="panel-body">
+            <input type="text"  ng-model="halsearch.key"   class="form-control">
+            <button type="submit">search</button>
+        </div>
+
+        <div class="panel panel-default" style="width:480px;margin-left: 15px;">
+            <label class="control-label col-sm-5">search filtre</label>
+            <b>titre</b>
+            <input type="checkbox" ng-model="halsearch.titre" >
+            <b>autheurs</b>
+
+            <input type="checkbox" ng-model="halsearch.autheurs" >
+            <b>institution</b>
+
+            <input type="checkbox" ng-model="halsearch.ins">
+        </div>
+    </form>
+</div>

@@ -1,4 +1,4 @@
-angular.module('MyApp', ['appRoutes', 'mainCtrl', 'authService', 'searchCtrl', 'searchService','dataminingService','dataminigCtrl', 'ui.bootstrap','blockUI'])
+angular.module('MyApp', ['appRoutes', 'mainCtrl', 'authService', 'searchCtrl', 'searchService','dataminingService','dataminigCtrl','halService','halCtrl', 'ui.bootstrap','blockUI'])
 
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push('AuthInterceptor');
