@@ -1,7 +1,9 @@
 <div ng-controller="halController as halsearch">
     <form ng-submit="halsearch.search()">
         <div class="panel-body">
-            <input type="text"  ng-model="halsearch.key"   class="form-control">
+            <input type="text"  ng-model="halsearch.key"   class="form-control" placeholder="titre">
+            <input type="text"  ng-model="halsearch.keyAuthor"   class="form-control" placeholder="autheur">
+            <input type="text"  ng-model="halsearch.keyInstitution"   class="form-control" placeholder="institution">
             <button type="submit">search</button>
         </div>
 
@@ -17,4 +19,15 @@
             <input type="checkbox" ng-model="halsearch.ins">
         </div>
     </form>
+
+
+    <div>
+        <div ng-repeat="x in halsearch.halResults">
+            <p>{{x.titre}}</p>
+            <p>{{x.autheurs}}</p>
+            <p>{{x.institution}}</p>
+            <a  href="{{x.document_url}}">document</a>
+        </div>
+    </div>
+
 </div>

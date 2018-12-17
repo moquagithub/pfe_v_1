@@ -1,6 +1,6 @@
 angular.module('halCtrl', ['halService'])
 
-    .controller('halController', function (hal,$window) {
+    .controller('halController', function (Hal,$window) {
         let vm = this;
 
         vm.titre = false;
@@ -9,21 +9,51 @@ angular.module('halCtrl', ['halService'])
         vm.ins = false;
 
 
+
+
         vm.search = function () {
+            let query = '';
            //definir les noms des attribus
-            if(vm.titre) vm.titreS = "titre";
+            if(vm.titre){
+                query = "title_t:"+vm.key;
+            }
             else vm.titreS="";
 
-            if(vm.autheurs) vm.autheursS="au";
+            if(vm.autheurs) {
+                query = "auth_t:"+vm.keyAuthor;
+            }
             else vm.autheursS="";
 
-            if(vm.ins) vm.insS = "institution";
+            if(vm.ins) {
+                query = "authorityInstitution_t:"+vm.keyInstitution;
+            }
             else vm.insS="";
 
+            if(vm.titre && vm.autheurs){
+                query = "title_t:"+vm.key+" auth_t:"+vm.keyAuthor;
+            }
+            if(vm.titre && vm.ins){
+                query ="title_t:"+vm.key+" authorityInstitution_t:"+vm.keyInstitution;
+            }
+            if(vm.autheurs && vm.ins){
+                query ="auth_t:"+vm.keyAuthor+" authorityInstitution_t:"+vm.keyInstitution;
+            }
+            if(vm.titre && vm.ins && vm.autheurs){
+                query ="auth_t:"+vm.keyAuthor+" authorityInstitution_t:"+vm.keyInstitution+" title_t:"+vm.key;
+            }
+
+
+            if(!vm.key&&!vm.keyAuthor&&!vm.keyInstitution){
+                $window.alert('veuillez spécifier un champ pour la recherche');
+                return;
+            }
+
+
             // appeler le service wew
-
-
-
+             Hal.searchHal(query).success(function (res) {
+                 vm.halResults = res;
+            });
+            // console.log(vm.halResults);
         }
 
 

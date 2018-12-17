@@ -4,7 +4,7 @@
       <env name="DEBUG" value="pfe:*" />
     </envs>
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
-      <browser start="true" url="https://localhost:3100/" />
+      <browser url="https://localhost:3100/" />
     </EXTENSION>
     <method v="2" />
   </configuration>

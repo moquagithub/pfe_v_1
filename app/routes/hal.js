@@ -1,10 +1,24 @@
+const express = require('express');
+const https = require('https');
 const fs = require('fs');
-const mongoose = require('mongoose');
+let api = express();
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const request = require('request');
+api.use(bodyParser.urlencoded({extended: true}));
+api.use(bodyParser.json());
+api.use(morgan('dev'));
+
+// certificat SSL
+let options = {
+    key: fs.readFileSync('./../../SSL/server.key'),
+    cert: fs.readFileSync('./../../SSL/server.crt'),
+    requestCert: false,
+    rejectUnauthorized: false
+};
 
 
-module.exports = function (app, express) {
-    let api = express.Router();
+let serverHttps = https.createServer(options, api);
 
 //process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
@@ -45,7 +59,7 @@ module.exports = function (app, express) {
         let rows = req.params.rows;
         request.get(
             {
-                url: 'https://api.archives-ouvertes.fr/search?q='+search+'&fl=title_s,authFullName_s,instStructName_s,fileMain_s&start='+start+'&rows='+rows+'&wt=json',
+                url: 'https://api.archives-ouvertes.fr/search?q="'+search+'"~&fl=title_s,authFullName_s,instStructName_s,fileMain_s&start='+start+'&rows='+rows+'&wt=json',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 }
@@ -70,11 +84,15 @@ module.exports = function (app, express) {
             });
     })
 
-    api.get('/dynamicSearch/:search/:filters/:start/:rows',function (req,res) {
+    api.get('/dynamicSearch/:onfield/:search/:filters/:start/:rows',function (req,res) {
         let search = req.params.search;
         let start = req.params.start;
         let rows = req.params.rows;
         let filters = req.params.filters;
+        let onfield = req.params.onfield;
+
+
+
         request.get(
             {
                 url: 'https://api.archives-ouvertes.fr/search?q='+search+'&fl='+filters+'&start='+start+'&rows='+rows+'&wt=json',
@@ -103,5 +121,10 @@ module.exports = function (app, express) {
     })
     /******************************************************************/
 
-    return api;
-}
+    serverHttps.listen(3101, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Listening on port 3101");
+        }
+    });
