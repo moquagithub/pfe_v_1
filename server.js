@@ -30,6 +30,7 @@ server.use(express.static(__dirname + '/public'));
 
 // let pilote = require('./app/pilote')(server,express);
 let solr = require('./app/routes/solr')(server,express);
+let hal = require('./app/routes/hal')(server,express);
 let dataminig = require('./app/routes/datamining')(server,express);
 
 /* /api is the root of our api, means that if we want to access the signup api
@@ -37,6 +38,7 @@ let dataminig = require('./app/routes/datamining')(server,express);
 
 // server.use('/pilote',pilote);
 server.use('/solr',solr);
+server.use('/hal',hal);
 server.use('/datamining',dataminig);
 
 //the parent file of the view pages (Angular routing)
