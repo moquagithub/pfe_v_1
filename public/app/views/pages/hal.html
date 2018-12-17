@@ -26,7 +26,8 @@
             <p>{{x.titre}}</p>
             <p>{{x.autheurs}}</p>
             <p>{{x.institution}}</p>
-            <a  href="{{x.document_url}}">document</a>
+            <a ng-if="x.document_url" ng-href="{{x.document_url}}">document</a>
+            <p>*************************************************************</p>
         </div>
     </div>
 

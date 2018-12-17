@@ -84,7 +84,7 @@ let serverHttps = https.createServer(options, api);
             });
     })
 
-    api.get('/dynamicSearch/:onfield/:search/:filters/:start/:rows',function (req,res) {
+    api.get('/dynamicSearch/:search/:filters/:start/:rows',function (req,res) {
         let search = req.params.search;
         let start = req.params.start;
         let rows = req.params.rows;
@@ -104,7 +104,8 @@ let serverHttps = https.createServer(options, api);
                 console.log('error:', error); // Print the error if one occurred
                 console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
                 // console.log('body:', body); // Print the HTML for the Google homepage.
-                if (!error){
+                if (!error && (JSON.parse(response.body).response.docs+ "" !== 'undefined')){
+
                     let data = JSON.parse(response.body).response.docs.map(doc => ({
                         titre : doc.title_s,
 

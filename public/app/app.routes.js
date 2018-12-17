@@ -3,11 +3,13 @@ angular.module('appRoutes',['ngRoute'])
     .config(function($routeProvider,$locationProvider){
         $routeProvider
             .when('/',{
-                templateUrl: 'app/views/pages/home.html'
+                templateUrl: 'app/views/pages/home.html',
+
             })
 
             .when('/search',{
-                templateUrl: 'app/views/pages/search.html'
+                templateUrl: 'app/views/pages/search.html',
+                controller:"SearchController as search"
             })
 
             .when('/data',{
@@ -16,6 +18,7 @@ angular.module('appRoutes',['ngRoute'])
             .when('/h',{
                 templateUrl: 'app/views/pages/hal.html'
             })
+
 
 
             .otherwise({redirectTo : '/'});

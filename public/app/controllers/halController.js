@@ -25,7 +25,7 @@ angular.module('halCtrl', ['halService'])
             else vm.autheursS="";
 
             if(vm.ins) {
-                query = "authorityInstitution_t:"+vm.keyInstitution;
+                query = "instStructName_t:"+vm.keyInstitution;
             }
             else vm.insS="";
 
@@ -33,13 +33,13 @@ angular.module('halCtrl', ['halService'])
                 query = "title_t:"+vm.key+" auth_t:"+vm.keyAuthor;
             }
             if(vm.titre && vm.ins){
-                query ="title_t:"+vm.key+" authorityInstitution_t:"+vm.keyInstitution;
+                query ="title_t:"+vm.key+" instStructName_t:"+vm.keyInstitution;
             }
             if(vm.autheurs && vm.ins){
-                query ="auth_t:"+vm.keyAuthor+" authorityInstitution_t:"+vm.keyInstitution;
+                query ="auth_t:"+vm.keyAuthor+" instStructName_t:"+vm.keyInstitution;
             }
             if(vm.titre && vm.ins && vm.autheurs){
-                query ="auth_t:"+vm.keyAuthor+" authorityInstitution_t:"+vm.keyInstitution+" title_t:"+vm.key;
+                query ="auth_t:"+vm.keyAuthor+" instStructName_t:"+vm.keyInstitution+" title_t:"+vm.key;
             }
 
 

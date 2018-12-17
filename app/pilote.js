@@ -12,11 +12,9 @@ module.exports = function (app, express) {
         let search = req.params.search;
         let start = req.params.start;
         let rows = req.params.rows;
-        let filters = req.params.filters;
-        let onfield = req.params.onfield;
         request.get(
             {
-                url: 'https://localhost:3101/dynamicSearch/'+onfield+'/'+search+'/title_s,authFullName_s,instStructName_s,fileMain_s/'+start+'/'+rows+'',
+                url: 'https://localhost:3101/dynamicSearch/'+search+'/title_s,authFullName_s,instStructName_s,fileMain_s/'+start+'/'+rows+'',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 }
