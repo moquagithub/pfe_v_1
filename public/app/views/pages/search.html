@@ -15,7 +15,9 @@
     <label for="affiliation">Affiliation</label>
 </form>
 
-
+<button ng-click="search.findClusters()">find clusters</button>
+<h4>Clusters :</h4>
+<p ng-repeat="cluster in search.clusters">{{cluster.labels}}</p>
 
 <h4>Results : </h4>
 <div ng-repeat="x in search.expertsResult.docs">

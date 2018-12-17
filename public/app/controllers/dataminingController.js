@@ -1,6 +1,6 @@
 angular.module('dataminigCtrl', ['dataminingService'])
 
-    .controller('DataminigController', function ($scope,data,modal,$window) {
+    .controller('DataminigController', function ($scope,data,modal,$window,Search) {
         let vm = this;
         vm.ok=false;
         vm.csv = "N";
@@ -43,6 +43,7 @@ angular.module('dataminigCtrl', ['dataminingService'])
 
        vm.startMigration = function () {
            $window.alert(vm.dbname);
+           Search.migrateToSolr(vm.dbname);
        }
 
     });

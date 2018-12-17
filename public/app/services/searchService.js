@@ -8,8 +8,12 @@ angular.module('searchService', [])
         return $http.get('/solr/searchExperts/'+search+'/'+byName+'/'+byTag+'/'+byAffiliation+'');
     }
 
-    searchFactory.data = function (search) {
-        return $http.get('');
+    searchFactory.migrateToSolr = function (dbname) {
+        return $http.post('/solr/addExpertsDocuments',{nomBD : dbname});
+    }
+
+    searchFactory.findClusters = function () {
+        return $http.get('/solr/findClusters');
     }
 
     return searchFactory;

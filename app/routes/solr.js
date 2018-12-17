@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Experts = require('../models/experts');
 const mongoose = require('mongoose');
+const request = require('request');
 let Schema = mongoose.Schema;
 
 /*Solar*/
@@ -21,6 +22,24 @@ module.exports = function (app, express) {
 
     /******************************************************************/
 
+    /*recherche avec clusters dans solr*/
+    api.get('/findClusters',function (req,res) {
+        request.get(
+            {
+                url: 'http://localhost:8983/solr/BigDP/clustering?q=tag%20:%20data',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                }
+            }
+            , function (error, response, body) {
+                console.log('error:', error); // Print the error if one occurred
+                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+                // console.log('body:', body); // Print the HTML for the Google homepage.
+                if (!error)
+                    res.send(JSON.parse(response.body));
+            });
+    })
+    
     /*Recherche d'experts dans Solr*/
     api.get('/searchExperts/:search/:byName/:byTag/:byAffiliation', function (req, res) {
         let search = req.params.search.toLowerCase();
