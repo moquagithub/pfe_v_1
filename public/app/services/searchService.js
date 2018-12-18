@@ -12,8 +12,8 @@ angular.module('searchService', [])
         return $http.post('/solr/addExpertsDocuments',{nomBD : dbname});
     }
 
-    searchFactory.findClusters = function () {
-        return $http.get('/solr/findClusters');
+    searchFactory.findClusters = function (key) {
+        return $http.get('/solr/findClusters/'+key);
     }
 
     return searchFactory;

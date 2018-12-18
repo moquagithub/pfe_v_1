@@ -1,4 +1,4 @@
-<form ng-submit="search.doSearch()">
+<form ng-submit="search.findClusters()">
 <input style="width: 400px" type="text" placeholder="rechercher un expert avec mot clé" ng-model="search.searchTitle"/>
     <button type="submit">rechercher</button>
     <br>
@@ -18,16 +18,14 @@
 
 
 
-<button ng-click="search.findClusters()">find clusters</button>
 <h4>Clusters :</h4>
-<div id="visualization" style="width: 400px; height: 300px"></div>
 
-<p ng-repeat="cluster in search.clusters">{{cluster.labels}}</p>
+<div id="visualization" style="width: 1200px; height: 400px"></div>
 
 <h4>Results : </h4>
-<div ng-repeat="x in search.expertsResult.docs">
-    <p>Name : {{x.prof_name}}</p>
-    <p>Tag text : {{x.tag}}</p>
-    <p>Affiliation : {{x.affiliations}}</p>
-<p>*******************************</p>
+<div ng-repeat="x in search.documentsAfterCluster">
+    <p>Name : {{x.prof_name[0]}}</p>
+    <p>Tag text : {{x.tag[0]}}</p>
+    <p>Affiliation : {{x.affiliations[0]}}</p>
+    <p>*******************************</p>
 </div>

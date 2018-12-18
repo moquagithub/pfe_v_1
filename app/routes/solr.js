@@ -23,10 +23,14 @@ module.exports = function (app, express) {
     /******************************************************************/
 
     /*recherche avec clusters dans solr*/
-    api.get('/findClusters',function (req,res) {
+    api.get('/findClusters/:key',function (req,res) {
+        let key = req.params.key;
+        if(!key){
+            key ='*';
+        }
         request.get(
             {
-                url: 'http://localhost:8983/solr/BigDP/clustering?q=tag%20:%20data',
+                url: 'http://localhost:8983/solr/BigDP/clustering?q=tag:('+key+'~)',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 }
@@ -35,8 +39,10 @@ module.exports = function (app, express) {
                 console.log('error:', error); // Print the error if one occurred
                 console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
                 // console.log('body:', body); // Print the HTML for the Google homepage.
-                if (!error)
-                    res.send(JSON.parse(response.body));
+                if (!error && response.statusCode!==400)
+                    res.json(JSON.parse(response.body));
+                else
+                    res.json({message : "not found!"});
             });
     })
     
