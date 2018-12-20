@@ -8,6 +8,7 @@ angular.module('searchCtrl', ['searchService'])
         vm.byAffiliation = false;
         vm.clusters = {};
         vm.documentsAfterCluster = '';
+        // vm.primaryResults = [];
 
         /*Initialize the foamtree*/
         let foamtree = new CarrotSearchFoamTree({
@@ -19,7 +20,7 @@ angular.module('searchCtrl', ['searchService'])
                     if(info.groups[0].label === cluster.labels[0]){
                         // $window.console.log(cluster);
                         let clusterDocsIDs = cluster.docs;
-                        // $window.console.log(clusterDocsIDs);
+                        $window.console.log(clusterDocsIDs);
                         let newDocs = [];
                         angular.forEach(vm.documents,function (doc) {
                             angular.forEach(clusterDocsIDs,function (id) {
@@ -35,7 +36,7 @@ angular.module('searchCtrl', ['searchService'])
                     }
                 })
 
-            },
+            }
         });
 
         vm.setExpertsResult = function (data) {
@@ -62,8 +63,29 @@ angular.module('searchCtrl', ['searchService'])
 
         vm.findClusters = function () {
             // $route.reload();
-            Search.findClusters(vm.searchTitle).success(function (res) {
-                vm.setExpertsResult(res.response);
+            let key1;
+            let key2;
+            let key3;
+            if(vm.searchTitleByDomaine+"" === "undefined" || vm.searchTitleByDomaine === "")
+                key1 = "*";
+            else
+                key1 = vm.searchTitleByDomaine;
+
+            if(vm.searchTitleByName+"" === "undefined" || vm.searchTitleByName === "")
+                key2 = "*";
+            else
+                key2 = vm.searchTitleByName;
+
+            if(vm.searchTitleByAffiliation+"" === "undefined" || vm.searchTitleByAffiliation === "")
+                key3 = "*";
+            else
+                key3 = vm.searchTitleByAffiliation;
+
+            Search.findClusters(key1,key2,key3).success(function (res) {
+
+                // console.log(res);
+                vm.documentsAfterCluster = res.response.docs;
+                vm.documents=res.response.docs;
                 vm.clusters = res.clusters;
                 vm.clustersTab = [];
                 angular.forEach(res.clusters, function (element) {

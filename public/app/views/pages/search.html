@@ -1,31 +1,43 @@
-<form ng-submit="search.findClusters()">
-<input style="width: 400px" type="text" placeholder="rechercher un expert avec mot clé" ng-model="search.searchTitle"/>
-    <button type="submit">rechercher</button>
-    <br>
-    <br>
-    <p>Options de recherche :</p>
-    <p>(Domaine par défaut)</p>
-    <input type="checkbox" id="name" ng-model="search.byName" ng-checked="false"/>
-    <label for="name">Nom</label>
-
-    <input type="checkbox" id="tag" ng-model="search.byTag" ng-checked="true"/>
-    <label for="tag">Domaine</label>
-
-    <input type="checkbox" id="affiliation" ng-model="search.byAffiliation" ng-checked="false"/>
-    <label for="affiliation">Affiliation</label>
-</form>
-
-
-
-
-<h4>Clusters :</h4>
-
-<div id="visualization" style="width: 1200px; height: 400px"></div>
-
-<h4>Results : </h4>
-<div ng-repeat="x in search.documentsAfterCluster">
-    <p>Name : {{x.prof_name[0]}}</p>
-    <p>Tag text : {{x.tag[0]}}</p>
-    <p>Affiliation : {{x.affiliations[0]}}</p>
-    <p>*******************************</p>
+<div class="col-md-4">
+    <div id="visualization" style="width: 350px; height: 700px"></div>
 </div>
+
+<div class="col-md-8">
+
+    <div>
+
+        <form ng-submit="search.findClusters()">
+            <input type="search" class="form-control" style="width: 400px" type="text"
+                   placeholder="recherche par domaine"
+                   ng-model="search.searchTitleByDomaine"/><br>
+            <input type="search" class="form-control" style="width: 400px" type="text" placeholder="recherche par nom"
+                   ng-model="search.searchTitleByName"/><br>
+            <input type="search" class="form-control" style="width: 400px" type="text"
+                   placeholder="recherche par affiliation"
+                   ng-model="search.searchTitleByAffiliation"/><br>
+            <button type="submit" class="btn-primary btn">rechercher</button>
+        </form>
+
+        <br>
+        <div ng-repeat="x in search.documentsAfterCluster">
+            <div class="" style="background-color: aliceblue; width: 500px;">
+
+                <div class="panel panel-info">
+                        <div class="panel-heading">{{x.prof_name[0]}}</div>
+                        <div class="panel-body">
+                            <div class="" style="color :#00B7FF">{{x.affiliations[0]}}</div>
+                            <div class="">{{x.tag[0]}}</div>
+                        </div>
+
+
+
+                </div>
+
+            </div>
+            <br>
+        </div>
+
+    </div>
+</div>
+
+

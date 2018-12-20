@@ -23,14 +23,13 @@ module.exports = function (app, express) {
     /******************************************************************/
 
     /*recherche avec clusters dans solr*/
-    api.get('/findClusters/:key',function (req,res) {
-        let key = req.params.key;
-        if(!key){
-            key ='*';
-        }
+    api.get('/findClusters/:domaine/:name/:affiliation', function (req, res) {
+        let domaine = req.params.domaine;
+        let name = req.params.name;
+        let affiliation = req.params.affiliation;
         request.get(
             {
-                url: 'http://localhost:8983/solr/BigDP/clustering?q=tag:('+key+'~)',
+                url: 'http://localhost:8983/solr/BigDP/clustering?q=(tag:('+domaine+'*) AND prof_name:('+name+'*) AND affiliations:('+affiliation+'*))',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 }
@@ -39,13 +38,13 @@ module.exports = function (app, express) {
                 console.log('error:', error); // Print the error if one occurred
                 console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
                 // console.log('body:', body); // Print the HTML for the Google homepage.
-                if (!error && response.statusCode!==400)
+                if (!error && response.statusCode !== 400)
                     res.json(JSON.parse(response.body));
                 else
-                    res.json({message : "not found!"});
+                    res.json({message: "not found!"});
             });
     })
-    
+
     /*Recherche d'experts dans Solr*/
     api.get('/searchExperts/:search/:byName/:byTag/:byAffiliation', function (req, res) {
         let search = req.params.search.toLowerCase();
@@ -129,28 +128,28 @@ module.exports = function (app, express) {
     /*Ajouter plusieurs documents à Solr*/
     api.post('/addExpertsDocuments', function (req, res) {
         /*Create a dynamic connexion to databases*/
-        let conn = mongoose.createConnection('mongodb://localhost:27017/'+req.body.nomBD+'',{ useNewUrlParser: true });
-        conn.on('error', function(err){
-            if(err) throw err;
+        let conn = mongoose.createConnection('mongodb://localhost:27017/' + req.body.nomBD + '', {useNewUrlParser: true});
+        conn.on('error', function (err) {
+            if (err) throw err;
         });
 
-        conn.on('close', function(){
-            console.log('connexion to '+req.body.nomBD+' closed');
+        conn.on('close', function () {
+            console.log('connexion to ' + req.body.nomBD + ' closed');
         });
 
-        conn.once('open', function callback () {
-            console.info('Connected to '+req.body.nomBD+' db successfully');
+        conn.once('open', function callback() {
+            console.info('Connected to ' + req.body.nomBD + ' db successfully');
         });
 
         let MyModel = conn.model('ExpertsSchema', new Schema({
-            _id : String,
-            USER_NAME : String,
-            USER_URL : String,
-            AFFILIATION : String,
-            VERIFICATION_ID : String,
-            CITATION_TEXT : String,
-            TAG_TEXT : String
-        },{ collection : 'GeneralProfiles' }));
+            _id: String,
+            USER_NAME: String,
+            USER_URL: String,
+            AFFILIATION: String,
+            VERIFICATION_ID: String,
+            CITATION_TEXT: String,
+            TAG_TEXT: String
+        }, {collection: 'GeneralProfiles'}));
 
         /*****************************************/
         MyModel.find({}).select('_id USER_NAME USER_URL AFFILIATION VERIFICATION_ID CITATION_TEXT TAG_TEXT').exec(function (err, docs) {
@@ -159,39 +158,39 @@ module.exports = function (app, express) {
             // Update document to Solr server
             // res.json(docs);
             let data = docs.map(doc => ({
-                id : doc._id,
+                id: doc._id,
 
-                prof_name : doc.USER_NAME,
+                prof_name: doc.USER_NAME,
 
-                prof_url : doc.USER_URL,
+                prof_url: doc.USER_URL,
 
-                affiliations : doc.AFFILIATION,
+                affiliations: doc.AFFILIATION,
 
-                verified_id : doc.VERIFICATION_ID,
+                verified_id: doc.VERIFICATION_ID,
 
-                citation : doc.CITATION_TEXT,
+                citation: doc.CITATION_TEXT,
 
-                tag : doc.TAG_TEXT
+                tag: doc.TAG_TEXT
             }));
             // res.json(data);
 
             let end = 0;
 
-               data.forEach((doc) => {
-                   client.update(doc, function (err, result) {
-                       if (err) {
-                           console.log(err);
-                           return;
-                       }
-                       end++;
-                        if(end === data.length){
-                            conn.close();
-                            res.send('Migration ended successfully');
+            data.forEach((doc) => {
+                client.update(doc, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    end++;
+                    if (end === data.length) {
+                        conn.close();
+                        res.send('Migration ended successfully');
 
-                        }
-                       console.log('Response:', result.responseHeader);
-                   });
-               })
+                    }
+                    console.log('Response:', result.responseHeader);
+                });
+            })
         })
     })
 

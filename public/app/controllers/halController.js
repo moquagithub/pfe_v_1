@@ -9,6 +9,44 @@ angular.module('halCtrl', ['halService'])
         vm.ins = false;
 
 
+        vm.collecte = function(){
+            Hal.getNumberOfRows(vm.keyCollecte).success(function (res) {
+                let bigger = false;
+                let step = 50;
+                if(step >= res){
+                    step = res;
+                    bigger = true;
+                }
+                console.log("nombre :"+res);
+                for(let i = step ; i<=res;i = i+step){
+
+                    let j = i-step;
+                    // console.log("start : "+j);
+                    // console.log("rows : "+i);
+                    Hal.collecteData(vm.keyCollecte,j,i).success(function (data) {
+                        // console.log(data);
+                        Hal.storeData(data).success(function (response) {
+                            console.log(response.message);
+                        })
+                    });
+
+                    if(i+step>res && !bigger){
+                        let k = i;
+                        i = res;
+                        // console.log("start : "+k);
+                        // console.log("rows : "+i);
+                        Hal.collecteData(vm.keyCollecte,k,i).success(function (data) {
+                            // console.log(data);
+                            Hal.storeData(data).success(function (response) {
+                                console.log(response.message);
+                            })
+                        });
+                    }
+                }
+            })
+
+        }
+
 
 
         vm.search = function () {
