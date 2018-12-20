@@ -11,9 +11,9 @@ let HalPapersSchema = new Schema({
     pdf_url : { type : String},
     title : { type : String, required: true},
     authors : { type : Array, default:[] , required: true},
-    institutions : {type:Array, default:[] ,required:true}
+    institutions : {type:Array, default:[] ,required:true},
+    year : {type : String}
 },{ collection : 'HalPapers' });
-
 
 
 

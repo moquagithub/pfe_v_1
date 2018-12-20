@@ -11,9 +11,12 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "^4.16.4",
+    "mdbid": "^1.0.0",
     "mongoose": "^5.3.15",
     "morgan": "~1.9.0",
     "request": "^2.88.0",
-    "solr-node": "^1.0.14"
+    "s-uid": "^1.3.3",
+    "solr-node": "^1.0.14",
+    "uuid": "^3.3.2"
   }
 }

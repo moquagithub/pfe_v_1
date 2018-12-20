@@ -14,7 +14,7 @@ module.exports = function (app, express) {
         let rows = req.params.rows;
         request.get(
             {
-                url: 'https://localhost:3101/dynamicSearch/'+search+'/title_s,authFullName_s,instStructName_s,fileMain_s/'+start+'/'+rows+'',
+                url: 'https://localhost:3101/dynamicSearch/'+search+'/title_s,authFullName_s,instStructName_s,fileMain_s,producedDateY_i/'+start+'/'+rows+'',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 }
@@ -37,7 +37,7 @@ module.exports = function (app, express) {
         let rows = req.params.rows;
         request.get(
             {
-                url: 'https://localhost:3101/dataCollecteByAffiliation/instStructName_t:'+search+'/title_s,authFullName_s,fileMain_s,halId_s,instStructName_s/'+start+'/'+rows+'',
+                url: 'https://localhost:3101/dataCollecteByAffiliation/instStructName_t:'+search+'/title_s,authFullName_s,fileMain_s,halId_s,instStructName_s,producedDateY_i/'+start+'/'+rows+'',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 }

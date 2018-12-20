@@ -9,6 +9,7 @@ api.use(bodyParser.urlencoded({extended: true}));
 api.use(bodyParser.json());
 api.use(morgan('dev'));
 const HalPapers = require('../models/hal_papers');
+const uuidv5 = require('uuid/v5');
 
 
 // certificat SSL
@@ -66,6 +67,8 @@ api.get('/dynamicSearch/:search/:filters/:start/:rows', function (req, res) {
                     institution: doc.instStructName_s,
 
                     document_url: doc.fileMain_s,
+
+                    year : ""+doc.producedDateY_i
                 }));
                 res.json(data);
 
@@ -104,6 +107,8 @@ api.get('/dataCollecteByAffiliation/:search/:filters/:start/:rows', function (re
                     institutions: doc.instStructName_s,
 
                     pdf_url: doc.fileMain_s,
+
+                    year : ""+doc.producedDateY_i
                 }));
                 res.json(data);
 
@@ -162,13 +167,13 @@ api.get('/getNumberOfRows/:search/:filters', function (req, res) {
 /*Ajouter plusieurs documents à Solr*/
 api.get('/addPapersDocuments', function (req, res) {
 
-    HalPapers.find({}).select('_id doc_link pdf_url title authors institutions').exec(function (err, docs) {
+    HalPapers.find({}).select('doc_link pdf_url title authors institutions year').exec(function (err, docs) {
         if (err)
             throw err;
         // Update document to Solr server
         // res.json(docs);
         let data = docs.map(doc => ({
-            id: doc._id,
+            id: uuidv5(doc.doc_link, uuidv5.URL).replace(/-/g, ""),
 
             doc_link: doc.doc_link,
 
@@ -179,6 +184,8 @@ api.get('/addPapersDocuments', function (req, res) {
             authors: doc.authors,
 
             institutions: doc.institutions,
+
+            year : doc.year,
 
             source: "hal"
         }));

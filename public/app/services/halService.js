@@ -16,7 +16,7 @@ angular.module('halService', [])
         }
 
         halFactory.storeData = function (data) {
-            console.log(data);
+            // console.log(data);
             return $http.post('/pilote/addHalDocuments',data);
         }
 
