@@ -151,7 +151,7 @@ module.exports = function (app, express) {
             TAG_TEXT: String
         }, {collection: 'GeneralProfiles'}));
 
-        /*****************************************/
+        /*-----------------------------------------*/
         MyModel.find({}).select('_id USER_NAME USER_URL AFFILIATION VERIFICATION_ID CITATION_TEXT TAG_TEXT').exec(function (err, docs) {
             if (err)
                 throw err;
@@ -194,6 +194,33 @@ module.exports = function (app, express) {
         })
     })
 
+    /******************************************************************/
+
+    //POUR LA RECHERCHE DE PAPERS
+
+    /******************************************************************/
+    /*recherche avec clusters dans solr*/
+    api.get('/findPapersClusters/:domaine/:name/:affiliation', function (req, res) {
+        let domaine = req.params.domaine;
+        let name = req.params.name;
+        let affiliation = req.params.affiliation;
+        request.get(
+            {
+                url: 'http://localhost:8983/solr/Papers/clustering?q=(title:('+domaine+'*) AND authors:('+name+'*) AND institutions:('+affiliation+'*))',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                }
+            }
+            , function (error, response, body) {
+                console.log('error:', error); // Print the error if one occurred
+                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+                // console.log('body:', body); // Print the HTML for the Google homepage.
+                if (!error && response.statusCode !== 400)
+                    res.json(JSON.parse(response.body));
+                else
+                    res.json({message: "not found!"});
+            });
+    })
     /******************************************************************/
 
     return api;

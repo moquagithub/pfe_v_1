@@ -12,6 +12,11 @@ angular.module('appRoutes',['ngRoute'])
                 controller:"SearchController as search"
             })
 
+            .when('/papers',{
+                templateUrl: 'app/views/pages/searchPapers.html',
+                controller:"SearchPapersController as papers"
+            })
+
             .when('/data',{
                 templateUrl: 'app/views/pages/data.html'
             })

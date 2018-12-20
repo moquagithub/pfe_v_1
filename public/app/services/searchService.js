@@ -16,5 +16,9 @@ angular.module('searchService', [])
         return $http.get('/solr/findClusters/'+keyDomaine+'/'+keyName+'/'+keyAffiliation);
     }
 
+    searchFactory.findPapersClusters = function (keyDomaine,keyName,keyAffiliation) {
+        return $http.get('/solr/findPapersClusters/'+keyDomaine+'/'+keyName+'/'+keyAffiliation);
+    }
+
     return searchFactory;
 })
