@@ -1,9 +1,10 @@
 angular.module('mainCtrl', ['authService'])
 
-    .controller('MainController', function ($window, $scope, $rootScope) {
+    .controller('MainController', function ($scope,$window, $rootScope) {
 
         let vm = this;
         vm.title = "ok";
+
 
 
 

@@ -9,20 +9,31 @@ angular.module('appRoutes',['ngRoute'])
 
             .when('/search',{
                 templateUrl: 'app/views/pages/search.html',
+                reloadOnSearch : false
+/*
                 controller:"SearchController as search"
+*/
             })
 
+            .when('/papers/:domaine/:searchFromProfile',{
+                templateUrl: 'app/views/pages/searchPapers.html',
+
+                /*
+                                controller:"SearchPapersController as papers"
+                */
+            })
             .when('/papers',{
                 templateUrl: 'app/views/pages/searchPapers.html',
-                controller:"SearchPapersController as papers"
+
+                /*
+                                controller:"SearchPapersController as papers"
+                */
             })
 
             .when('/data',{
                 templateUrl: 'app/views/pages/data.html'
             })
-            .when('/h',{
-                templateUrl: 'app/views/pages/hal.html'
-            })
+
 
 
 
