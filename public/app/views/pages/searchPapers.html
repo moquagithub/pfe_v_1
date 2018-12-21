@@ -1,0 +1,48 @@
+<div ng-controller="SearchPapersController as papers">
+
+    <div class="col-md-4">
+        <div id="visualization2" style="width: 350px; height: 700px"></div>
+    </div>
+
+<div class="col-md-8">
+    <h3>DOCUMENTS</h3>
+
+    <div>
+
+        <form ng-submit="papers.findClusters()">
+            <input type="search" class="form-control" style="width: 400px" type="text"
+                   placeholder="recherche par domaine"
+                   ng-model="papers.searchTitleByDomaine"/><br>
+            <input type="search" class="form-control" style="width: 400px" type="text" placeholder="recherche par nom"
+                   ng-model="papers.searchTitleByName"/><br>
+            <input type="search" class="form-control" style="width: 400px" type="text"
+                   placeholder="recherche par affiliation"
+                   ng-model="papers.searchTitleByAffiliation"/><br>
+            <button type="submit" class="btn-primary btn">rechercher</button>
+        </form>
+
+        <br>
+        <div ng-repeat="x in papers.documentsAfterCluster track by $index">
+            <div class="" style="background-color: aliceblue; width: 500px;">
+
+                <div class="panel panel-info">
+                    <div class="panel-heading"><a href="{{x.doc_link[0]}}">{{x.title[0]}}</a></div>
+                    <div class="panel-body">
+                        <div ng-repeat="y in x.institutions track by $index">
+                            <div class="" style="color :#00B7FF">{{y}}</div>
+                        </div>
+                        <div ng-repeat="y in x.authors track by $index">
+                            <div class="">{{y}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+        </div>
+
+    </div>
+</div>
+</div>
+
+

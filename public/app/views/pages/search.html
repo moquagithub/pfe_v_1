@@ -1,31 +1,51 @@
-<form ng-submit="search.findClusters()">
-<input style="width: 400px" type="text" placeholder="rechercher un expert avec mot clé" ng-model="search.searchTitle"/>
-    <button type="submit">rechercher</button>
-    <br>
-    <br>
-    <p>Options de recherche :</p>
-    <p>(Domaine par défaut)</p>
-    <input type="checkbox" id="name" ng-model="search.byName" ng-checked="false"/>
-    <label for="name">Nom</label>
+<div ng-controller="SearchController as search">
 
-    <input type="checkbox" id="tag" ng-model="search.byTag" ng-checked="true"/>
-    <label for="tag">Domaine</label>
+    <div>
 
-    <input type="checkbox" id="affiliation" ng-model="search.byAffiliation" ng-checked="false"/>
-    <label for="affiliation">Affiliation</label>
-</form>
+        <div class="col-md-4">
+            <div id="visualization" style="width: 350px; height: 700px"></div>
+        </div>
 
+        <div class="col-md-8">
 
+            <h3>PROFILS</h3>
+            <div>
 
+                <form ng-submit="search.findClusters()">
+                    <input type="search" class="form-control" style="width: 400px" type="text"
+                           placeholder="recherche par domaine"
+                           ng-model="search.searchTitleByDomaine"/><br>
+                    <input type="search" class="form-control" style="width: 400px" type="text"
+                           placeholder="recherche par nom"
+                           ng-model="search.searchTitleByName"/><br>
+                    <input type="search" class="form-control" style="width: 400px" type="text"
+                           placeholder="recherche par affiliation"
+                           ng-model="search.searchTitleByAffiliation"/><br>
+                    <button type="submit" class="btn-primary btn">rechercher</button>
+                </form>
 
-<h4>Clusters :</h4>
+                <br>
+                <div ng-repeat="x in search.documentsAfterCluster track by $index">
+                    <div class="" style="background-color: aliceblue; width: 500px;">
 
-<div id="visualization" style="width: 1200px; height: 400px"></div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <button class="btn-link" ng-click="search.searchPapersByTag(x.tag[0])">{{x.prof_name[0]}}</button>
+                            </div>
+                            <div class="panel-body">
+                                <div class="" style="color :#00B7FF">{{x.affiliations[0]}}</div>
+                                <div class="">{{x.tag[0]}}</div>
+                            </div>
+                        </div>
 
-<h4>Results : </h4>
-<div ng-repeat="x in search.documentsAfterCluster">
-    <p>Name : {{x.prof_name[0]}}</p>
-    <p>Tag text : {{x.tag[0]}}</p>
-    <p>Affiliation : {{x.affiliations[0]}}</p>
-    <p>*******************************</p>
+                    </div>
+                    <br>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
